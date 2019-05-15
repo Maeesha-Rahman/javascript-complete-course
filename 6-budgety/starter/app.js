@@ -77,7 +77,9 @@ const UIController = (function() {
         inputType: '.add__type',
         inputDescription: '.add__description',
         inputValue: '.add__value',
-        inputBtn: '.add__btn'
+        inputBtn: '.add__btn',
+        incomeContainer: '.income__list',
+        expensesContainer: '.expenses__list',
     }
     
     // has to be public.
@@ -90,6 +92,47 @@ const UIController = (function() {
                 value: document.querySelector(DOMStrings.inputValue).value,
             };
         },
+
+        addListItem: function(obj, type) {
+            // create HTML string with placeholder text
+
+            let html, newHtml, element; 
+
+            if (type === 'inc') {
+                element = DOMStrings.incomeContainer;
+                html = '<div class="item clearfix" id="income-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+            } else if (type === 'exp') {
+                element = DOMStrings.expensesContainer;
+                html = '<div class="item clearfix" id="expense-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>'
+            }
+            // replace the placeholder text with some actual data
+            newHtml = html.replace('%id%', obj.id);
+            // have to do it on the newHtml so that the id placeholder is the new one and not the old html 
+            newHtml = newHtml.replace('%description%', obj.description);
+            newHtml = newHtml.replace('%value%', obj.value);
+            // insert the HTML into the DOM 
+            // beforeend ensures the newHTML will be inserted as a child of the element (income__list or expenses__list)
+            document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
+        },
+
+        clearFields: function() {
+            let fields, fieldsArr;
+
+            fields = document.querySelectorAll(DOMStrings.inputDescription + ', ' + DOMStrings.inputValue);
+
+            // set the 'this' variable into fields & this will trick the slice method into thinking it was given an array and so it will return an array 
+            fieldsArr = Array.prototype.slice.call(fields);
+
+            // loop over array and clear all the fields that were selected 
+
+            fieldsArr.forEach(function(current, index, array) {
+                current.value = "";
+            });
+
+            // focus back to the first element input (in this case, inputDescription)
+            fieldsArr[0].focus();
+        },
+
         // expose DOMStrings object into public so it can be accessed by other modules 
         getDOMStrings: function() {
             return DOMStrings;
@@ -126,8 +169,11 @@ const controller = (function(budgetCtrl, UICtrl) {
         // 2. add the item to the budget controller
         newItem = budgetCtrl.addItem(input.type, input.description, input.value);
         // 3. add the item to the UI
-        // 4. calculate the budget
-        // 5. display the budget on the UI
+        UICtrl.addListItem(newItem, input.type);
+        // 4. clear the fields
+        UICtrl.clearFields();
+        // 5. calculate the budget
+        // 6. display the budget on the UI
        
     };
 
