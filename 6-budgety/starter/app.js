@@ -174,6 +174,7 @@ const UIController = (function() {
         expensesLabel: '.budget__expenses--value',
         percentageLabel: '.budget__expenses--percentage',
         container: '.container',
+        expensesPercLabel: '.item__percentage',
     }
     
     // has to be public.
@@ -248,6 +249,27 @@ const UIController = (function() {
             }
         },
 
+        displayPercentages: function(percentages) {
+            const fields = document.querySelectorAll(DOMStrings.expensesPercLabel);
+            // fields is a node list
+
+            const nodeListForEach = function(list, callback) {
+                for (let i = 0; i < list.length; i++) {
+                    // current = list[i] and index is i
+                    callback(list[i], i);
+                }
+            };
+
+            nodeListForEach(fields, function(current, index) {
+                if (percentages[index] > 0) {
+                    current.textContent = percentages[index] + '%';
+                } else {
+                    current.textContent = '---';
+                }
+                
+            });
+        },
+
         // expose DOMStrings object into public so it can be accessed by other modules 
         getDOMStrings: function() {
             return DOMStrings;
@@ -293,7 +315,7 @@ const controller = (function(budgetCtrl, UICtrl) {
         // 2. read percentages from the budget controller
         const percentages = budgetCtrl.getPercentages();
         // 3. update the UI with the new percentages
-        console.log(percentages);
+        UICtrl.displayPercentages(percentages);
     }
     
     // function that is called when someone clicks button or presses enter key
