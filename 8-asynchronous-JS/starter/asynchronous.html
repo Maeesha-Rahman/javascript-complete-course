@@ -9,6 +9,70 @@
 <body>
     <h1>Asynchronous JavaScript</h1>
     <script>
+
+        // synchronous JS - all instructions are executed one after the other line by line, in the order appearing in the code.
+        // const second = () => {
+        //     console.log('second');
+        // }
+
+        // const first = () => {
+        //     console.log('hey there');
+        //     second();
+        //     console.log('the end');
+        // }
+
+        // first();
+
+
+        // asynchronous JS
+
+        // const second = () => {
+        //     setTimeout(() => {
+        //         // will run after 2000 ms
+        //         console.log('async hey there');
+        //     }, 2000);
+        // }
+
+        // const first = () => {
+        //     console.log('hey there');
+        //     second();
+        //     console.log('the end');
+        // }
+
+        // first();
+
+        // first function is called and executed logging 'hey there', calls the second function which calls a setTimeout that takes in an anonymous cb function. The setTimeout is basically a timer that will execute the cb function we pass into it after 2000ms.  However, this will not make the code stop for 2 seconds. the function returns and goes back to first function and logs 'the end'. After the 2 seconds have passed, 'async hey there' is logged. 
+
+        // the event loop
+
+        // the event loop, web APIS together with the execution stack and the message queue make up the javascript runtime. 
+
+        // execution context / execution stack / call stack
+        // first()
+        // log()
+        // function returns 
+        // log() pops off the stack 
+        // second()
+        // setTimeout() // timer is created together with the callback function right inside web APIs environment. the cb function is not called right now but it stays attached to the timer until it finishes. 
+        // the setTimeout is part of web APIs which lives outside the javascript engine. DOM events and XMLHttpRequest are also a part of this and live outside JS engine but we have access to them bc they are also in JS runtime. This is exactly will timer will keep running for 2 seconds asynchronously, so our code can keep running without being blocked. since timer is working in background we don't have to wait and can keep executing our code 
+        // setTimeout() returns and pops off stack
+        // second() also pops off stack which now returns as well
+        // log('the end') // new log() execution context
+        // log() pops off the stack
+        // first() function returns and pops off the stack 
+        // all of our code has run in a synchronous way and have the timer running asychronously in background 
+        // once 2s is up and timer disappears. 
+        // the callback function moves to message queue where it waits to be executed as soon as the execution/call stack is empty 
+
+        // same thing happens with DOM events
+        // event listeners sit in web api environment waiting for a certain event to happen
+        // as soon as the event happens, then cb function is placed in message queue ready to be executed 
+
+        // how are the cb functions in message queue executed? - event loop
+        // event loop constantly monitors the message queue an call stack and to push the first cb function in line, onto the call stack as soon as the stack is empty 
+        // execution context timer callback()
+        // log()
+        // log() pops off stack and so does the cb()
         
     </script>
 </body>

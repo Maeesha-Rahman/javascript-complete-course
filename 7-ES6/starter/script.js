@@ -2,14 +2,14 @@
 
 // ES6
 // block scope - like an IIFEs. created some data that is not accessible on the outside
-{
-    const a = 1;
-    let b = 2;
-    var c = 3;
-}
+// {
+//     const a = 1;
+//     let b = 2;
+//     var c = 3;
+// }
 
 // console.log(a + b); // will not log bc variables are inside block
-console.log(c); // will still log bc variables declared with var are not block scoped but are function scoped
+// console.log(c); // will still log bc variables declared with var are not block scoped but are function scoped
 
 // ES5 
 // (function() {
@@ -40,47 +40,47 @@ console.log(c); // will still log bc variables declared with var are not block s
 //Unlike other functions, arrow functions don't get their own 'this' keyword. They use the 'this' keyword of the function they are written in. - lexical 'this' variable.
 
 // ES5
-var box5 = {
-    color: 'green',
-    position: 1,
-    clickMe: function() {
+// var box5 = {
+//     color: 'green',
+//     position: 1,
+//     clickMe: function() {
 
-        var self = this;
-        document.querySelector('.green').addEventListener('click', function() {
-            var str = 'this is box number ' + self.position + ' and it is ' + self.color;
-            alert(str);
-        });
-    },
-}
+//         var self = this;
+//         document.querySelector('.green').addEventListener('click', function() {
+//             var str = 'this is box number ' + self.position + ' and it is ' + self.color;
+//             // alert(str);
+//         });
+//     },
+// }
 // the callback function is not a method it is a regular function so therefore 'this' keyword does not point to box5 object, but instead the window object. therefore the 'this' variables are undefined. a hack is to store the 'this' into a variable in the method before the regular function. 
 // box5.clickMe();
 
 // ES6
-const box6 = {
-    color: 'green',
-    position: 1,
-    clickMe: function() {
+// const box6 = {
+//     color: 'green',
+//     position: 1,
+//     clickMe: function() {
 
-        document.querySelector('.green').addEventListener('click', () => {
-            const str = `This is box number ${this.position} and it is ${this.color}`;
-            alert(str);
-        });
-    },
-}
+//         document.querySelector('.green').addEventListener('click', () => {
+//             const str = `This is box number ${this.position} and it is ${this.color}`;
+//             // alert(str);
+//         });
+//     },
+// }
 // by using the arrow function, we have access to the 'this' keyword from method bc arrow function shares the lexical 'this' keyword of its surroundings 
 // box6.clickMe();
 
-const box7 = {
-    color: 'green',
-    position: 1,
-    clickMe: () => {
+// const box7 = {
+//     color: 'green',
+//     position: 1,
+//     clickMe: () => {
 
-        document.querySelector('.green').addEventListener('click', () => {
-            const str = `This is box number ${this.position} and it is ${this.color}`;
-            alert(str);
-        });
-    },
-}
+//         document.querySelector('.green').addEventListener('click', () => {
+//             const str = `This is box number ${this.position} and it is ${this.color}`;
+//             // alert(str);
+//         });
+//     },
+// }
 // by changing the method to arrow function, the this keyword is now from its lexical surroundings, which is the global context. so the method would no longer have its own this keyword. since the this keyword points to global window object, the variables are undefined. 
 // box7.clickMe();
 
@@ -102,18 +102,18 @@ const box7 = {
 
 // ES6 
 
-const Person = function(name) {
-    this.name = name;
-}
-// ES5
-Person.prototype.myFriends = function(friends) {
-    const arr = friends.map(el => `${this.name} is friends with ${el}.`);
-    console.log(arr);
-}
+// const Person = function(name) {
+//     this.name = name;
+// }
+// // ES5
+// Person.prototype.myFriends = function(friends) {
+//     const arr = friends.map(el => `${this.name} is friends with ${el}.`);
+//     // console.log(arr);
+// }
 
-const friends = ['bob', 'jane', 'mark']
-const mike = new Person('mike');
-mike.myFriends(friends);
+// const friends = ['bob', 'jane', 'mark']
+// const mike = new Person('mike');
+// mike.myFriends(friends);
 // new Person('john').myFriends(friends);
 
 // destructuring 
@@ -138,23 +138,23 @@ mike.myFriends(friends);
 // console.log(a);
 // console.log(b);
 
-const calcAgeRetirement = (year) => {
-    const age = new Date().getFullYear() - year;
-    return [age, 65 - age];
-}
+// const calcAgeRetirement = (year) => {
+//     const age = new Date().getFullYear() - year;
+//     return [age, 65 - age];
+// }
 
-const [age, retirement] = calcAgeRetirement(1990);
-console.log(age);
-console.log(retirement);
+// const [age, retirement] = calcAgeRetirement(1990);
+// console.log(age);
+// console.log(retirement);
 
 // arrays
 // queryselector all returns a nodeList. we have to transform it into an array
-const boxes = document.querySelectorAll('.box');
+// const boxes = document.querySelectorAll('.box');
 
 // converts nodelist from boxes to an array so we can use array methods on it
-const boxesArr = Array.from(boxes);
+// const boxesArr = Array.from(boxes);
 
-boxesArr.forEach(cur => cur.style.backgroundColor = 'dodgerblue');
+// boxesArr.forEach(cur => cur.style.backgroundColor = 'dodgerblue');
 
 // if you want to use 'break' or 'continue' you cannot use map or foreach to loop but instead use a for loop
 
@@ -170,13 +170,13 @@ boxesArr.forEach(cur => cur.style.backgroundColor = 'dodgerblue');
 // };
 
 // ES6
-for (const cur of boxesArr) {
-    if (cur.className.includes('blue')) {
-        continue;
-    } else {
-        cur.textContent = 'I changed to blue!';
-    }
-}
+// for (const cur of boxesArr) {
+//     if (cur.className.includes('blue')) {
+//         continue;
+//     } else {
+//         cur.textContent = 'I changed to blue!';
+//     }
+// }
 
 //ES5
 // var ages = [12, 17, 8, 21, 14, 11];
@@ -201,34 +201,34 @@ for (const cur of boxesArr) {
 
 // spread operator - takes an array and transforms it into single values
 
-const addFourAges = (a, b, c, d) => {
-    return a + b + c + d;
-}
+// const addFourAges = (a, b, c, d) => {
+//     return a + b + c + d;
+// }
 
-const sum1 = addFourAges(18, 30, 12, 21);
-console.log(sum1);
+// const sum1 = addFourAges(18, 30, 12, 21);
+// console.log(sum1);
 
-const ages = [18, 30, 12, 21]
+// const ages = [18, 30, 12, 21]
 
-const sum2 = addFourAges(...ages);
-console.log(sum2);
+// const sum2 = addFourAges(...ages);
+// console.log(sum2);
 
-const familySmith = ['john', 'jane', 'mark'];
+// const familySmith = ['john', 'jane', 'mark'];
 
-const familyMiller = ['mary', 'bob', 'ann'];
+// const familyMiller = ['mary', 'bob', 'ann'];
 
-const bigFamily = [...familySmith, 'lily', ...familyMiller];
-console.log(bigFamily);
+// const bigFamily = [...familySmith, 'lily', ...familyMiller];
+// console.log(bigFamily);
 
-// can also use the spread operator on nodelist
+// // can also use the spread operator on nodelist
 
-const heading = document.querySelector('h1');
-const boxes2 = document.querySelectorAll('.box');
-// heading is a node not a nodelist but boxes is a nodelist
-const all = [heading, ...boxes2];
+// const heading = document.querySelector('h1');
+// const boxes2 = document.querySelectorAll('.box');
+// // heading is a node not a nodelist but boxes is a nodelist
+// const all = [heading, ...boxes2];
 
-// Array.from transforms it and returns an array
-Array.from(all).forEach(cur => cur.style.color = 'purple');
+// // Array.from transforms it and returns an array
+// Array.from(all).forEach(cur => cur.style.color = 'purple');
 
 // rest parameters
 
@@ -261,40 +261,40 @@ Array.from(all).forEach(cur => cur.style.color = 'purple');
 
 // isFullAge(1990, 2003, 1965, 2016, 1993);
 
-const isFullAge = (limit, ...years) => {
-    // console.log(years);
-    years.forEach(cur => console.log((2019 - cur) >= limit));
-}
-// set 18 as the limit when you call the function as it's the first parameter 
-isFullAge(18, 1990, 2003, 1965, 2016, 1993);
+// const isFullAge = (limit, ...years) => {
+//     // console.log(years);
+//     years.forEach(cur => console.log((2019 - cur) >= limit));
+// }
+// // set 18 as the limit when you call the function as it's the first parameter 
+// isFullAge(18, 1990, 2003, 1965, 2016, 1993);
 
-// default parameters 
+// // default parameters 
 
-const SmithPerson = function(firstName, yearOfBirth, lastName = 'smith', nationality = 'canadian') {
+// const SmithPerson = function(firstName, yearOfBirth, lastName = 'smith', nationality = 'canadian') {
 
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.yearOfBirth = yearOfBirth;
-    this.nationality = nationality;
-}
+//     this.firstName = firstName;
+//     this.lastName = lastName;
+//     this.yearOfBirth = yearOfBirth;
+//     this.nationality = nationality;
+// }
 
-const john = new SmithPerson('john', 1990);
-console.log(john);
-const emily = new SmithPerson('emily', 1983, 'diaz', 'spanish');
-console.log(emily);
+// const john = new SmithPerson('john', 1990);
+// console.log(john);
+// const emily = new SmithPerson('emily', 1983, 'diaz', 'spanish');
+// console.log(emily);
 
-// maps
+// // maps
 
-const question = new Map();
-// first param is key, 2nd param is value
-question.set('question', 'what is the name of the latest major javascript version?');
-question.set(1, 'ES5');
-question.set(2, 'ES6');
-question.set(3, 'ES2015');
-question.set(4, 'ES7');
-question.set('correct', 3);
-question.set(true, 'correct answer');
-question.set(false, 'pls try again');
+// const question = new Map();
+// // first param is key, 2nd param is value
+// question.set('question', 'what is the name of the latest major javascript version?');
+// question.set(1, 'ES5');
+// question.set(2, 'ES6');
+// question.set(3, 'ES2015');
+// question.set(4, 'ES7');
+// question.set('correct', 3);
+// question.set(true, 'correct answer');
+// question.set(false, 'pls try again');
 
 // to retrieve data use get and then put in the key you want to see the value 
 // console.log(question.get('question'));
@@ -303,10 +303,10 @@ question.set(false, 'pls try again');
 // to delete. question(key)
 // question.delete(4);
 
-if(question.has(4)) {
-    // question.delete(4);
-    // console.log('answer 4 is here')
-}
+// if(question.has(4)) {
+//     // question.delete(4);
+//     // console.log('answer 4 is here')
+// }
 
 // to delete everything
 // question.clear();
@@ -411,37 +411,161 @@ if(question.has(4)) {
 
 
 //ES6
-class Person6 {
-    constructor(name, yearOfBirth, job) {
+// class Person6 {
+//     constructor(name, yearOfBirth, job) {
+//         this.name = name;
+//         this.yearOfBirth = yearOfBirth;
+//         this.job = job;
+//     }
+
+//     calculateAge() {
+//         const age = new Date().getFullYear() - this.yearOfBirth;
+//         console.log(age);
+//     }
+// }
+
+// // subclass
+// // need to say subclass extends the superclass 
+// class Athlete6 extends Person6 {
+//     constructor(name, yearOfBirth, job, olympicGames, medals) {
+//         // calling super will automatically call the superclass so we don't have to manually set any 'this' variables 
+//         super(name, yearOfBirth, job);
+//         this.olympicGames = olympicGames;
+//         this.medals = medals;
+//     }
+
+//     wonMedal() {
+//         this.medals++;
+//         console.log(this.medals);
+//     }
+// }
+
+// const johnAthlete6 = new Athlete6('john', 1990, 'swimmer', 3, 10);
+
+// johnAthlete6.calculateAge();
+// johnAthlete6.wonMedal();
+
+/////////////////////////////////
+// CODING CHALLENGE
+
+/*
+
+Suppose that you're working in a small town administration, and you're in charge of two town elements:
+1. Parks
+2. Streets
+
+It's a very small town, so right now there are only 3 parks and 4 streets. All parks and streets have a name and a build year.
+
+At an end-of-year meeting, your boss wants a final report with the following:
+1. Tree density of each park in the town (forumla: number of trees/park area)
+2. Average age of each town's park (forumla: sum of all ages/number of parks)
+3. The name of the park that has more than 1000 trees
+4. Total and average length of the town's streets
+5. Size classification of all streets: tiny/small/normal/big/huge. If the size is unknown, the default is normal
+
+All the report data should be printed to the console.
+
+HINT: Use some of the ES6 features: classes, subclasses, template strings, default parameters, maps, arrow functions, destructuring, etc.
+
+*/
+
+class Element {
+    constructor(name, buildYear) {
         this.name = name;
-        this.yearOfBirth = yearOfBirth;
-        this.job = job;
-    }
-
-    calculateAge() {
-        const age = new Date().getFullYear() - this.yearOfBirth;
-        console.log(age);
+        this.buildYear = buildYear;
     }
 }
 
-// subclass
-// need to say subclass extends the superclass 
-class Athlete6 extends Person6 {
-    constructor(name, yearOfBirth, job, olympicGames, medals) {
-        // calling super will automatically call the superclass so we don't have to manually set any 'this' variables 
-        super(name, yearOfBirth, job);
-        this.olympicGames = olympicGames;
-        this.medals = medals;
+class Park extends Element {
+    constructor(name, buildYear, area, numTrees) {
+        super(name, buildYear);
+        this.area = area; // km2
+        this.numTrees = numTrees;
     }
 
-    wonMedal() {
-        this.medals++;
-        console.log(this.medals);
+    treeDensity() {
+        const density = this.numTrees / this.area;
+        console.log(`${this.name} has a tree density of ${density} trees per square km.`);
     }
 }
 
-const johnAthlete6 = new Athlete6('john', 1990, 'swimmer', 3, 10);
+class Street extends Element {
+    constructor(name, buildYear, length, size = 3) {
+        super(name, buildYear);
+        this.length = length;
+        this.size = size;
+    }
 
-johnAthlete6.calculateAge();
-johnAthlete6.wonMedal();
+    classifyStreet() {
+        const classification = new Map();
+        classification.set(1, 'tiny');
+        classification.set(2, 'small');
+        classification.set(3, 'normal');
+        classification.set(4, 'big');
+        classification.set(5, 'huge');
+        console.log(`${this.name}, build in ${this.buildYear}, is a ${classification.get(this.size)} street.`);
+    }
+}
 
+const allParks = [new Park('green park', 1987, 0.2, 215),
+                    new Park('national park', 1894, 2.9, 3541),
+                    new Park('oak park', 1953, 0.4, 949)];
+const allStreets = [new Street('ocean avenue', 1999, 1.1, 4),
+                    new Street('evergreen street', 2008, 2.7, 2),
+                    new Street('4th street', 2015, 0.8),
+                    new Street('sunset blvd', 1982, 2.5, 5)];
+
+const calc = (arr) => {
+    // reduce method is used to reduce an array to a single value 
+    // perfect for adding up all elements in an array 
+
+    // 0 is the number at which we want to start. the prevValue will be 0 initially since that is what we defined. so would return 0 + 1987. 
+
+    const sum = arr.reduce((prevValue, currentValue, index) => prevValue + currentValue, 0);
+
+    // use destruction to return two different arrays. one containing the sum (total), and one containing the average = sum / total parks. 
+    return [sum, sum / arr.length];
+}
+
+function reportParks(p) {
+
+    console.log('----- Parks Report');
+
+    // density
+    p.forEach(el => el.treeDensity());
+
+    // average age
+    const ages = p.map(el => new Date().getFullYear() - el.buildYear);
+    // calc takes an array of ages 
+    // totalAge = gets the returned value of sum and avgAge gets returned value of sum / arr.lengths.
+    const [totalAge, avgAge] = calc(ages);
+    console.log(`our ${p.length} parks have an average of ${avgAge} years.`)
+
+    // which park has more than 1000 trees
+    // returns an array so we can immediately chain the next method 
+    const index = p.map(el => el.numTrees).findIndex(el => el >= 1000);
+    // console.log(index); // index = 1 (second park)
+    // allParks array[index].name to get name of park
+    console.log(`${p[index].name} has more than 1000 trees.`);
+}
+
+function reportStreets(s) {
+    
+    console.log('----- Streets Report');
+
+    // total and average length of the town's streets
+    const stLength = s.map(el => el.length);
+
+    const [totalLength, avgLength] = calc(stLength);
+    console.log(`Our ${s.length} streets have a total length of ${totalLength} km, with an average of ${avgLength} km.`);
+
+    // can also do it directly inside 
+    // const [totalLength, avgLength] = calc(s.map(el => el.length));
+
+    // classify sizes
+    s.forEach(el => el.classifyStreet());
+
+}
+
+reportParks(allParks);
+reportStreets(allStreets);
