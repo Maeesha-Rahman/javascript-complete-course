@@ -73,6 +73,179 @@
         // execution context timer callback()
         // log()
         // log() pops off stack and so does the cb()
+
+        // callback hell
+        // const getRecipe = () => {
+        //     setTimeout(() => {
+        //         const recipeID = [542, 877, 298, 126];
+        //         console.log(recipeID);
+
+        //         setTimeout(id => {
+        //             const recipe = {title: 'fresh tomato pasta', publisher: 'jonas'};
+        //             console.log(`${id}: ${recipe.title}`);
+
+        //             setTimeout(publisher => {
+        //                 const recipe2 = {title: 'italian pizza', publisher: 'jonas'};
+        //                 console.log(recipe);
+        //             }, 1500, recipe.publisher);
+        //         }, 1500, recipeID[2]);
+
+        //     }, 1500);
+        // }
+
+        // getRecipe();
+
+
+    // to escape callback hell use PROMISES 
+    // promise is an object that keeps track about whether a certain event has happened already or not. 
+    // and if it did happen, then promise determines what happens after the event has happened (with events here meaning asynchronous events, like timer or data coming back from ajax call). 
+    // promise - essentially promises us to get the data - concept of a future value that we're expecting 
+
+    // promise has different states
+    // PENDING - before the event has happened, promise is in pending state
+    // SETTLED/RESOLVED - after event has happened 
+    // FULFILLED - when promise is successful which means result/data is available then promise is fulfilled 
+    // REJECTED - if there was an error then promise is rejected 
+
+    // inside promise, pass in function called executer which is a function that will be immediately called once promise is created. the executer function takes in two arguments, which are the cb functions called resolve and reject. that is bc the executer function is used to inform the promise whether the event it is handling is successful or not. if successful, resolve function will be called, if not, reject will be called. 
+    // const getIDs = new Promise((resolve, reject) => {
+    //     setTimeout(() => {
+    //         resolve([542, 877, 298, 126]);
+    //         // reject([542, 877, 298, 126]);
+    //     }, 1500);
+    // });
+
+    // const getRecipe = recID => {
+    //     return new Promise((resolve, reject) => {
+    //         setTimeout((ID) => {
+    //             const recipe = {title: 'fresh tomato pasta', publisher: 'jonas'};
+    //             resolve(`${ID}: ${recipe.title}`);
+    //         }, 1500, recID);
+    //         // recID becomes ID
+    //     });
+    // };
+
+    // const getRelated = publisher => {
+    //     return new Promise((resolve, reject) => {
+    //         setTimeout(pub => {
+    //             const recipe = {title: 'italian pizza', publisher: 'jonas'};
+    //             resolve(`${pub}: ${recipe.title}`);
+    //         }, 1500, publisher);
+    //         // ^this publisher is the one we get as an input through the getRelated function which will then be passed into the cb function of setTimeout and will then be called pub. 
+    //     });
+    // };
+
+    // all promise objects have the 'then' and 'catch' methods
+
+    // this then method allows us to add event handler for the case that promise is fulfilled (there's a result). pass in a cb which will handle what we do in case promise is successful. the argument that we pass into cb (IDs) will always be the result of the successful promise (in this case it will be the entire array [542, 877, 298, 126])
+    // getIDs
+    // .then(IDs => {
+    //     console.log(IDs);
+    //     // IDs[2] = 298 from the array returned this is then passed to getRecipe as the argument recID which is turned to ID in setTimeout
+    //     return getRecipe(IDs[2]); // will return a promise, add the next 'then' to handle the result of that resolved promise 
+    // })
+    // .then(recipe => {
+    //     console.log(recipe); // logs the data returned from promise
+    //     // outputs 298: fresh tomato pasta
+
+    //     // return getRelated(recipe.publisher);
+    //     // recipe.publisher returns a string (since we put template string in resolve) so that's why it will return undefined 
+    //     return getRelated('jonas');
+    // })
+    // .then(relatedRecipe => {
+    //     console.log(relatedRecipe);
+    // })
+    // .catch(error => {
+    //     // this promise is always successful so will never get an error 
+    //     // console.log(error);
+    //     console.log('error');
+    // });
+
+    // the catch method allows us to add a handler for the case that the promise is rejected 
+
+    // async and await
+    // async and await makes it easier to consume promises
+    // async function returns a promise
+
+    // async function getRecipesAW() {
+    //     // await can only be used inside an async function
+    //     // await will stop code from executing until promise is fulfilled/resolved. value of the await expression is the result value of the promise. which is then assigned to the IDs variable 
+    //     const IDs = await getIDs;
+    //     console.log(IDs);
+
+    //     const recipe = await getRecipe(IDs[2]);
+    //     console.log(recipe);
+
+    //     const related = await getRelated('jonas');
+    //     console.log(related);
+
+    //     return recipe;
+    // }
+
+    // synchronously call function and the async function runs asychronously in the background 
+    // const rec = getRecipesAW();
+    // won't work because this code here runs synchronously, this log runs immediately after getRecipesAW is called, but the getRecipes will still be running asynchronously in the background so it logs promise (pending).The getRecipesAW will log data into console long after the console log(rec) has already run. to solve this problem, use the 'then' method.
+    // console.log(rec);
+
+    // this function automatically returns a promise with a result value of recipe, so we can use 'then' and pass cb function where argument is the result value of the promise. 
+    // getRecipesAW().then(result => console.log(`${result} is the best ever!`));
+
+
+    // AJAX and APIs
+
+    // fetch API gets our data and returns a promise. can use 'then' and 'catch' method on this promise.
+    // fetch automatically returns a promise w/o us having to write a promise, so we are just consuming it here. 
+
+    function getWeather(woeid) {
+
+        fetch(`https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/${woeid}/`)
+        .then(result => {
+            // data that comes back from fetch AJAX request will be called result in this cb function 
+            // console.log(result);
+            // returns a promise asynchronously in the background. when it's ready, it comes back with data, to handle the data we need to add another 'then' method.
+            return result.json()
+        })
+        .then(data => {
+            // console.log(data);
+            const today = data.consolidated_weather[0];
+            console.log(`temperatures today in ${data.title} stay between ${today.min_temp} and ${today.max_temp}.`);
+        })
+        .catch(error => console.log(error));
+        }
+
+        getWeather(2487956);
+        getWeather(44418);
+
+        // async and await route looks like it is synchronous code but it is not. the function runs in the background. 
+
+        async function getWeatherAW(woeid) {
+            try {
+                // result of the promise will be assigned to this variable result
+                const result = await fetch(`https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/${woeid}/`);
+                // to make it json. this is also a promise so we have to await it 
+                const data = await result.json();
+                // console.log(data);
+                const tomorrow = data.consolidated_weather[1];
+                console.log(`temperatures tomorrow in ${data.title} stay between ${tomorrow.min_temp} and ${tomorrow.max_temp}.`);
+                return data;
+            } catch(error) {
+                // will log the error to the console 
+                console.log(error);
+            }
+        }
+
+        getWeatherAW(2487956);
+        // const dataLondon = getWeatherAW(44418);
+        // // console log happens way before the function gets data, hence will log promise pending. have to use 'then' method to handle result value that is returned from return data. 
+        // console.log(dataLondon);
+
+        let dataLondon;
+        // we have access to then method on this promise 
+        getWeatherAW(44418).then(data => {
+            dataLondon = data
+            console.log(dataLondon);
+        });
+    
         
     </script>
 </body>
