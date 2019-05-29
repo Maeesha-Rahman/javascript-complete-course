@@ -13,6 +13,7 @@ export const clearInput = () => {
 
 export const clearResults = () => {
     elements.searchResList.innerHTML = '';
+    elements.searchResPages.innerHTML = '';
 }
 
 // 'pasta with tomato and spinach'
@@ -64,8 +65,59 @@ const renderRecipe = recipe => {
     elements.searchResList.insertAdjacentHTML('beforeend', markup);
 };
 
-export const renderResults = recipes => {
+// type: 'prev' or 'next'
+// if we are on 'prev' button and we're on page num 2. 2 - 1 = 1 so we can go to page number 1. 
+// if we are on a 'next' button then we should go to page num 3 if we are on page num 2. so 2 + 1 = 3. 
+// ${type === 'prev' ? page - 1 : page + 1}
+const createButton = (page, type) => `
+    <button class="btn-inline results__btn--${type}" data-goto=${type === 'prev' ? page - 1 : page + 1}>
+        <span>Page ${type === 'prev' ? page - 1 : page + 1}</span>
+        <svg class="search__icon">
+            <use href="img/icons.svg#icon-triangle-${type === 'prev' ? 'left' : 'right'}"></use>
+        </svg>
+    </button>
+`;
+
+const renderButtons = (page, numResults, resPerPage) => {
+    // num of pages = 30 / 10 = 3 pages
+    // add the Math.ceil method to round up the numbers incase num of pages = a decimal number like 4.5 will now be 5 pages
+    const pages = Math.ceil(numResults / resPerPage);
+    
+    let button;
+    // if on page 1 and there are more than 1 pages
+    if (page === 1 && pages > 1) {
+        // only button to go to next page
+        button = createButton(page, 'next');
+    } else if (page < pages) {
+        // both buttons
+        button = `
+            ${createButton(page, 'prev')}
+            ${createButton(page, 'next')}
+        `;
+    } // if page is === to the last page (pages) and only want prev button if there are more than 1 pages
+    else if (page === pages && pages > 1) {
+        // only button to go to previous page
+        button = createButton(page, 'prev');
+    };
+    
+    elements.searchResPages.insertAdjacentHTML('afterbegin', button);
+};
+
+export const renderResults = (recipes, page = 1, resPerPage = 10) => {
+    // render results of current page
+    // on page 1 (1-1) * 10 = 0 so we start with 0
+    // on page 2 (2-1) * 10 = 10 so we start with 10
+    // on page 3 (3-1) * 10 = 20 so we start with 20
+    const start = (page - 1) * resPerPage;
+    // on page 1 (1 * 10) = ends with 10
+    // on page 2 (2 * 10) = ends with 20
+    // on page 3 (3 * 10) = ends with 30
+    const end = page * resPerPage;
     // recipes.forEach(el => renderRecipe(el));
     // same as:
-    recipes.forEach(renderRecipe);
+    // recipes.forEach(renderRecipe);
+    recipes.slice(start, end).forEach(renderRecipe);
+
+    // render the pagination buttons
+    renderButtons(page, recipes.length, resPerPage);
 };

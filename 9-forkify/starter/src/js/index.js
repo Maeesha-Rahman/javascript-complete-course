@@ -76,3 +76,22 @@ elements.searchForm.addEventListener('submit', e => {
 // const search = new Search('pizza');
 // console.log(search);
 // search.getResults();
+
+// event delegation - put event handler on element that is already there on load, and try to figure out where click event happened so that we can take action
+
+elements.searchResPages.addEventListener('click', e => {
+    // The closest() method of the Element interface returns the closest ancestor of the current element (or the current element itself) which matches the selectors given in a parameter. If no such element exists, it returns null.
+    // use the closest method to get the one with the class of .btn-inline 
+    const btn = e.target.closest('.btn-inline');
+    // e.target = exactly where this click happened (will show the html element that was clicked)
+    // console.log(btn);
+    
+    // if there is a btn
+    if (btn) {
+        // can read the data attribute we dynamically typed in the html using .dataset and then name of data attribute (goto). the variable regarding the page number gets stored in the dataset.goto. we can replace 'goto' with anything we want in the html. the variable we get is a string '1' so we need to convert to a number using parseInt. set the base to 10 for num 0-9. 
+        const goToPage = parseInt(btn.dataset.goto, 10);
+        searchView.clearResults();
+        searchView.renderResults(state.search.result, goToPage);
+        // console.log(goToPage);
+    }
+});
