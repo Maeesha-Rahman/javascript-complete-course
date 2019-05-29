@@ -36,6 +36,7 @@
 import Search from './models/Search';
 import * as searchView from './views/searchView';
 import { elements, renderLoader, clearLoader } from './views/base';
+import Recipe from './models/Recipe';
 
 // global state of the app
     // search object - where we have search query and search results and this will be part of the state
@@ -44,6 +45,7 @@ import { elements, renderLoader, clearLoader } from './views/base';
     // and liked recipes
 const state = {};
 
+// ** SEARCH CONTROLLER **
 const controlSearch = async () => {
     // 1. get query from view
     const query = searchView.getInput();
@@ -59,12 +61,18 @@ const controlSearch = async () => {
         searchView.clearResults();
         renderLoader(elements.searchRes);
 
-        // 4. search for recipes
-        await state.search.getResults(); // returns a promise
+        try {
+            // 4. search for recipes
+            await state.search.getResults(); // returns a promise
 
-        // 5. render results on UI
-        clearLoader();
-        searchView.renderResults(state.search.result);
+            // 5. render results on UI
+            clearLoader();
+            searchView.renderResults(state.search.result);
+
+        } catch (error) {
+            alert('Something went wrong with the search...');
+            clearLoader();
+        }
     }
 }
 
@@ -95,3 +103,41 @@ elements.searchResPages.addEventListener('click', e => {
         // console.log(goToPage);
     }
 });
+
+// ** RECIPE CONTROLLER **
+
+const controlRecipe = async () => {
+    // get ID from url
+    // replace the # symbol with nothing to remove it so we get the actual id we need
+    const id = window.location.hash.replace('#', '');
+    console.log(id);
+
+    // if we have an id
+    if (id) {
+        // prepare UI for changes
+
+        // create new recipe object
+        state.recipe = new Recipe(id);
+
+        try {
+            // get recipe data
+            // want this to happen asynchronously as getRecipe will return a promise
+            // since we used 'await' have to change controlRecipe function to an -async- function
+            await state.recipe.getRecipe();
+
+            // calculate servings and time
+            state.recipe.calcTime();
+            state.recipe.calcServings();
+
+            // render recipe 
+            console.log(state.recipe);
+        } catch (error) {
+            alert('Error processing recipe');
+        }  
+    }
+};
+
+// window.addEventListener('hashchange', controlRecipe);
+// window.addEventListener('load', controlRecipe);
+
+['hashchange', 'load'].forEach(event => window.addEventListener(event, controlRecipe));
