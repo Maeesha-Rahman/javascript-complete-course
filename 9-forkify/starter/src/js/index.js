@@ -34,9 +34,10 @@
 // 79bf64ca9abeccb654949508f44b28ae
 
 import Search from './models/Search';
-import * as searchView from './views/searchView';
-import { elements, renderLoader, clearLoader } from './views/base';
 import Recipe from './models/Recipe';
+import * as searchView from './views/searchView';
+import * as recipeView from './views/recipeView';
+import { elements, renderLoader, clearLoader } from './views/base';
 
 // global state of the app
     // search object - where we have search query and search results and this will be part of the state
@@ -115,22 +116,32 @@ const controlRecipe = async () => {
     // if we have an id
     if (id) {
         // prepare UI for changes
+        recipeView.clearRecipe();
+        renderLoader(elements.recipe);
+
+        // highlight selected search item
+        // if there was a search 
+        if (state.search) searchView.highlightSelected(id);
 
         // create new recipe object
         state.recipe = new Recipe(id);
 
         try {
-            // get recipe data
+            // get recipe data and parse ingredients
             // want this to happen asynchronously as getRecipe will return a promise
             // since we used 'await' have to change controlRecipe function to an -async- function
             await state.recipe.getRecipe();
+            console.log(state.recipe.ingredients);
+            state.recipe.parseIngredients();
 
             // calculate servings and time
             state.recipe.calcTime();
             state.recipe.calcServings();
 
             // render recipe 
-            console.log(state.recipe);
+            clearLoader();
+            recipeView.renderRecipe(state.recipe);
+
         } catch (error) {
             alert('Error processing recipe');
         }  
@@ -141,3 +152,20 @@ const controlRecipe = async () => {
 // window.addEventListener('load', controlRecipe);
 
 ['hashchange', 'load'].forEach(event => window.addEventListener(event, controlRecipe));
+
+// handling recipe button clicks
+elements.recipe.addEventListener('click', e => {
+    // if the target matches the class or any of its child elements 
+    if (e.target.matches('.btn-decrease, .btn-decrease *')) {
+        // decrease button is clicked
+        if (state.recipe.servings > 1) {
+            state.recipe.updateServings('dec');
+            recipeView.updateServingsIngredients(state.recipe);
+        }
+    } else if (e.target.matches('.btn-increase, .btn-increase *')) {
+        // increase button is clicked
+        state.recipe.updateServings('inc');
+        recipeView.updateServingsIngredients(state.recipe);
+    }
+    console.log(state.recipe);
+});

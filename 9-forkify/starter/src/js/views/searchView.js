@@ -16,6 +16,15 @@ export const clearResults = () => {
     elements.searchResPages.innerHTML = '';
 }
 
+export const highlightSelected = id => {
+    const resultsArr = Array.from(document.querySelectorAll('.results__link'));
+    resultsArr.forEach(el => {
+        el.classList.remove('results__link--active');
+    })
+    // can't save this into base.js bc it is an element that has not yet been created on load
+    document.querySelector(`a[href="#${id}"]`).classList.add('results__link--active');
+};
+
 // 'pasta with tomato and spinach'
 // using the split method will split the string into an array with 5 elements [pasta, with, tomato, and, spinish];
 // since we now have an array, we can use the reduce method on it (accumulator, current)

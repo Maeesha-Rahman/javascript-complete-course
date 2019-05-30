@@ -31,4 +31,87 @@ export default class Recipe {
     calcServings() {
         this.servings = 4;
     }
+
+    parseIngredients() {
+        const unitsLong = ['tablespoons', 'tablespoon', 'ounces', 'ounce', 'teaspoons', 'teaspoon', 'cups', 'pounds'];
+        const unitsShort = ['tbsp', 'tbsp', 'oz', 'oz', 'tsp', 'tsp', 'cup', 'pound'];
+        const units = [...unitsShort, 'kg', 'g'];
+
+        const newIngredients = this.ingredients.map(el => {
+            // 1. uniform units
+            // create ingredient variable and set it to each of the elements in the array that is mapped over 
+            // convert everything to lowercase since some are in uppercase and we want it to be consistent so it can match the arrays we created above 
+            let ingredient = el.toLowerCase();
+            // in our cb we need both the current element (unit) and index (i)
+            unitsLong.forEach((unit, i) => {
+                // replace each element in the array with the element in unitsShort 
+                // if we find 'tablespoons' in the ingredient, it will be replaced with the unit at the same position [0] in the unitsShort array 'tbsp'
+                ingredient = ingredient.replace(unit, unitsShort[i]);
+            })
+
+            // 2. remove parentheses 
+            // replace everything within parentheses and the parentheses itself with nothing '';
+            ingredient = ingredient.replace(/ *\([^)]*\) */g, ' ');
+
+            // 3. parse ingredients into count, unit and ingredient 
+            // convert ingredient into an array
+            const arrIng = ingredient.split(' ');
+            // for each current element, it will test that if that element is inside the unitsShort array. It will return the index if that element turns out to be true 
+            const unitIndex = arrIng.findIndex(el2 => units.includes(el2));
+
+            let objIng;
+
+            
+            if (unitIndex > -1) {
+                // if there is a unit
+                // ex. 4 1/2 cups, arrCount is [4, 1/2] -> eval('4+1/2') = 4.5
+                // ex. 4 cups, arrCount is [4]
+                const arrCount = arrIng.slice(0, unitIndex);
+                let count; 
+                if (arrCount.length === 1) {
+                    count = eval(arrIng[0].recipe('-', '+'));
+                } else {
+                    count = eval(arrIng.slice(0, unitIndex).join('+'));
+                }
+
+                objIng = {
+                    count,
+                    unit: arrIng[unitIndex],
+                    ingredient: arrIng.slice(unitIndex + 1).join(' ')
+                };
+
+            } else if (parseInt(arrIng[0], 10)) {
+                // there is NO unit, but 1st element is a number
+                objIng = {
+                    count: parseInt(arrIng[0], 10),
+                    unit: '',
+                    ingredient: arrIng.slice(1).join(' ')
+                }
+            } else if (unitIndex === -1) {
+                // there is NO unit and NO number in 1st position 
+                objIng = {
+                    count: 1,
+                    unit: '',
+                    ingredient
+                }
+            }
+
+            return ingredient;
+
+        });
+        this.ingredients = newIngredients;
+    }
+
+    updateServings (type) {
+        // update servings
+        // if type is decreased then newServings will be this.servings - 1 
+        const newServings = type === 'dec' ? this.servings - 1 : this.servings + 1;
+
+        // update ingredients
+        this.ingredients.forEach(ing => {
+            ing.count = ing.count * (newServings / this.servings);
+        });
+
+        this.servings = newServings;
+    }
 }
