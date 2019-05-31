@@ -15,7 +15,7 @@ export const renderItem = item => {
         </button>
     </li>
     `;
-    elements.shopping.insertAdjacentElement('beforeend', markup);
+    elements.shopping.insertAdjacentHTML('beforeend', markup);
 };
 
 export const deleteItem = id => {

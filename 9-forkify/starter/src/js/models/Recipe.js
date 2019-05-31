@@ -60,16 +60,16 @@ export default class Recipe {
             const unitIndex = arrIng.findIndex(el2 => units.includes(el2));
 
             let objIng;
-
             
             if (unitIndex > -1) {
                 // if there is a unit
                 // ex. 4 1/2 cups, arrCount is [4, 1/2] -> eval('4+1/2') = 4.5
                 // ex. 4 cups, arrCount is [4]
                 const arrCount = arrIng.slice(0, unitIndex);
+                
                 let count; 
                 if (arrCount.length === 1) {
-                    count = eval(arrIng[0].recipe('-', '+'));
+                    count = eval(arrIng[0].replace('-', '+'));
                 } else {
                     count = eval(arrIng.slice(0, unitIndex).join('+'));
                 }
@@ -96,7 +96,7 @@ export default class Recipe {
                 }
             }
 
-            return ingredient;
+            return objIng;
 
         });
         this.ingredients = newIngredients;

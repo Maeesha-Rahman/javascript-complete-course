@@ -22,7 +22,7 @@ export const highlightSelected = id => {
         el.classList.remove('results__link--active');
     })
     // can't save this into base.js bc it is an element that has not yet been created on load
-    document.querySelector(`a[href="#${id}"]`).classList.add('results__link--active');
+    document.querySelector(`.results__link[href*="${id}"]`).classList.add('results__link--active');
 };
 
 // 'pasta with tomato and spinach'
@@ -39,7 +39,7 @@ acc: 15 // acc + cur.length = 15 + 3 = 18 // newTitle = ['pasta', 'with', 'tomat
 acc: 18 // acc + cur.length = 18 + 7 = 25 // newTitle = ['pasta', 'with', 'tomato']
 */
 
-const limitRecipeTitle = (title, limit = 17) => {
+export const limitRecipeTitle = (title, limit = 17) => {
     const newTitle = [];
     if (title.length > limit) {
         title.split(' ').reduce((acc, cur) => {
