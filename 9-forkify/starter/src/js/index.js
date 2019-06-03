@@ -49,7 +49,6 @@ import { elements, renderLoader, clearLoader } from './views/base';
     // also want shopping list object
     // and liked recipes
 const state = {};
-window.state = state;
 
 // ** SEARCH CONTROLLER **
 const controlSearch = async () => {
@@ -270,6 +269,3 @@ elements.recipe.addEventListener('click', e => {
     }
     // console.log(state.recipe);
 });
-
-
-window.l = new List();
